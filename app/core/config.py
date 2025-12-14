@@ -94,6 +94,12 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
 
+    # MongoDB Configuration
+    MONGODB_URL: str = "mongodb://localhost:27017"
+    MONGODB_DATABASE: str = "application_management"
+    MONGODB_MAX_CONNECTIONS: int = 10
+    MONGODB_MIN_CONNECTIONS: int = 1
+
     def _check_default_secret(self, var_name: str, value: str | None) -> None:
         if value == "changethis":
             message = (

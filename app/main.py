@@ -5,6 +5,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.api.main import api_router
 from app.core.config import settings
+from app.core.mongo import connect_to_mongodb, close_mongodb_connection
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
@@ -31,3 +32,15 @@ if settings.all_cors_origins:
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize services on startup."""
+    await connect_to_mongodb()
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Cleanup on shutdown."""
+    await close_mongodb_connection()
