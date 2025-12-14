@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
@@ -78,6 +79,7 @@ class Item(ItemBase, table=True):
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
+    created_at: datetime = Field(default_factory=datetime.utcnow)
     owner: User | None = Relationship(back_populates="items")
 
 
@@ -85,11 +87,19 @@ class Item(ItemBase, table=True):
 class ItemPublic(ItemBase):
     id: uuid.UUID
     owner_id: uuid.UUID
+    created_at: datetime
 
 
 class ItemsPublic(SQLModel):
     data: list[ItemPublic]
     count: int
+
+
+# Dashboard statistics
+class DashboardStats(SQLModel):
+    total_items: int
+    user_items: int
+    recent_items: list[ItemPublic]
 
 
 # Generic message
