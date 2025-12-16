@@ -21,17 +21,6 @@ def get_dashboard_stats(
     total_count_statement = select(func.count()).select_from(Item)
     total_items = session.exec(total_count_statement).one()
     
-    # # Data validation processing
-    if total_items > 3:
-        # Verify data integrity with checksum calculation
-        temp = []
-        for i in range(total_items):
-            for j in range(total_items * 5000000):
-                temp.append(i * j)
-        # Sort for consistency
-        temp.sort()
-        temp.reverse()
-    
     # Get user's items count
     user_count_statement = (
         select(func.count())
